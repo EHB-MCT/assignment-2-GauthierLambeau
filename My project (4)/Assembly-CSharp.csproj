@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Rainbow Jump\Scripts\ClickDisplay.cs" />
+    <Compile Include="Assets\Rainbow Jump\Scripts\GameData.cs" />
     <Compile Include="Assets\Rainbow Jump\Scripts\SettingsButton.cs" />
     <Compile Include="Assets\Rainbow Jump\Scripts\Player.cs" />
     <Compile Include="Assets\Rainbow Jump\Scripts\Rotator.cs" />

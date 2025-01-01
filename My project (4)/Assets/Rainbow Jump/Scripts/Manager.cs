@@ -1,11 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO; 
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro; // Import TextMeshPro namespace
+using TMPro; 
 
 namespace RainbowJump.Scripts
 {
+    [System.Serializable]
+    public class GameData
+    {
+        public float score;
+        public int clickCount;
+
+        public GameData(float score, int clickCount)
+        {
+            this.score = score;
+            this.clickCount = clickCount;
+        }
+    }
+
     public class Manager : MonoBehaviour
     {
         public string androidUrl;
@@ -18,11 +32,11 @@ namespace RainbowJump.Scripts
 
         public Transform playerTransform;
         public Text scoreText;
-        public Text highScoreText; // Reference to the UI text for displaying the high score
-        public TextMeshProUGUI clickCountText; // Reference for displaying clicks during Game Over
+        public Text highScoreText;
+        public TextMeshProUGUI clickCountText; 
 
         public float score = 0f;
-        private float highScore = 0f; // Variable to hold the high score
+        private float highScore = 0f; 
 
         public bool gameOver = false;
 
@@ -42,7 +56,6 @@ namespace RainbowJump.Scripts
         public AudioClip buttonSound;
         private AudioSource audioSource;
 
-        // Start is called before the first frame update
         void Start()
         {
             Application.targetFrameRate = 144;
@@ -51,12 +64,10 @@ namespace RainbowJump.Scripts
 
             audioSource = GetComponent<AudioSource>();
 
-            // Load the high score from PlayerPrefs and display it in the UI
             highScore = PlayerPrefs.GetFloat("HighScore", 0f);
             highScoreText.text = "High Score: " + highScore.ToString("0");
         }
 
-        // Update is called once per frame
         void Update()
         {
             if (gameOver == true)
@@ -70,15 +81,19 @@ namespace RainbowJump.Scripts
                 deathParticle.SetActive(true);
                 gameOver = false;
 
-                // Stop tracking clicks and update Game Over UI
+                int clickCount = 0;
+
+         
                 if (FindObjectOfType<ClickTracker>() != null)
                 {
-                    int clickCount = FindObjectOfType<ClickTracker>().GetLeftClickCount();
+                    clickCount = FindObjectOfType<ClickTracker>().GetLeftClickCount();
                     clickCountText.text = "Clicks This Game: " + clickCount.ToString();
                     FindObjectOfType<ClickTracker>().EndGame();
                 }
 
-                // Save the high score if it's greater than the current high score
+      
+                SaveGameData(score, clickCount);
+
                 if (score > highScore)
                 {
                     highScore = score;
@@ -87,13 +102,13 @@ namespace RainbowJump.Scripts
                 }
             }
 
-            // Update the score to be the highest player's y position in the current game session
+            
             if (playerTransform.position.y > score)
             {
                 score = playerTransform.position.y;
             }
 
-            // Display the score as the highest player's y position minus 3
+         
             scoreText.text = (score).ToString("0");
         }
 
@@ -110,7 +125,6 @@ namespace RainbowJump.Scripts
             tapToStartBtn.SetActive(false);
             playerMovement.enabled = true;
 
-            // Reset click count at game start
             if (FindObjectOfType<ClickTracker>() != null)
             {
                 FindObjectOfType<ClickTracker>().ResetClickCount();
@@ -134,7 +148,7 @@ namespace RainbowJump.Scripts
 
             playerTrail.Clear();
 
-            // Reset the click counter
+         
             if (FindObjectOfType<ClickTracker>() != null)
             {
                 FindObjectOfType<ClickTracker>().ResetClickCount();
@@ -154,6 +168,26 @@ namespace RainbowJump.Scripts
         public void PlayButtonSound()
         {
             audioSource.PlayOneShot(buttonSound);
+        }
+
+        private void SaveGameData(float score, int clickCount)
+        {
+ 
+            GameData gameData = new GameData(score, clickCount);
+
+       
+            string fileName = "GameData_" + System.DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".json";
+
+       
+            string filePath = Path.Combine(Application.persistentDataPath, fileName);
+
+    
+            string jsonData = JsonUtility.ToJson(gameData, true);
+
+  
+            File.WriteAllText(filePath, jsonData);
+
+            Debug.Log("Game data saved to: " + filePath);
         }
 
         public void OpenURL()
