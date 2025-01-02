@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="Assets\Rainbow Jump\Scripts\ClickDisplay.cs" />
     <Compile Include="Assets\Rainbow Jump\Scripts\GameData.cs" />
+    <Compile Include="Assets\Rainbow Jump\Scripts\ScoreboardDisplay.cs" />
     <Compile Include="Assets\Rainbow Jump\Scripts\SettingsButton.cs" />
     <Compile Include="Assets\Rainbow Jump\Scripts\Player.cs" />
     <Compile Include="Assets\Rainbow Jump\Scripts\Rotator.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="Assets\Rainbow Jump\Scripts\ObstacleMovement.cs" />
     <Compile Include="Assets\Rainbow Jump\Scripts\FollowPlayer.cs" />
     <Compile Include="Assets\Rainbow Jump\Scripts\Rotator02.cs" />
+    <Compile Include="Assets\Rainbow Jump\Scripts\ScoreboardManager.cs" />
     <Compile Include="Assets\Rainbow Jump\Scripts\GameManager.cs" />
     <Compile Include="Assets\Rainbow Jump\Scripts\Spawner.cs" />
   </ItemGroup>
